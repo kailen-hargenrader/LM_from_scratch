@@ -1,5 +1,5 @@
 [project]
-name = "eecs148b_hw1"
+name = "basicformer"
 version = "1.0.0"
 description = "EE/CS 148B HW1"
 readme = "README.md"
@@ -26,7 +26,7 @@ requires = ["uv_build>=0.8.3,<0.9.0"]
 build-backend = "uv_build"
 
 [tool.uv.build-backend]
-module-name = "eecs148b_hw1"
+module-name = "basicformer"
 module-root = ""
 
 [tool.uv]
