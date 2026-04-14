@@ -119,9 +119,10 @@ class BPETokenizer(BaseTokenizer):
     def get_vocab(self) -> Vocab:
         return self.vocab
     
-    def train(self, corpus: str, max_vocab_size: int, special_tokens: list[str]) -> None:
+    def train(self, corpus: str, max_vocab_size: int, special_tokens: list[str], pbar=None) -> None:
         #make sure we have space left in the vocab
         if len(self.vocab) >= max_vocab_size:
+            print("Vocab size is already at the maximum size.")
             return
         
         #separate special tokens from the corpus
@@ -189,6 +190,10 @@ class BPETokenizer(BaseTokenizer):
             self.merges[best_pair] = new_token_id
             self.vocab[new_token_id] = best_pair[0] + best_pair[1]
             new_token_id += 1
+            
+            # Update progress bar if provided
+            if pbar is not None:
+                pbar.update(1)
             
             # Update Words (Local Update)
             affected_word_indices = inverted_index.get(best_pair, set()).copy()
