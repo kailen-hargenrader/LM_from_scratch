@@ -14,12 +14,11 @@ os.makedirs(ARTIFACTS_DIR, exist_ok=True)
 TOKENIZER_PICKLE_PATH = os.path.join(ARTIFACTS_DIR, f'TS_bpe_tokenizer_{VOCAB_SIZE}.pkl')
 
 
-def train_bpe_tokenizer(input_file, vocab_size):
+def train_bpe_tokenizer(input_file, vocab_size, special_tokens=["<|endoftext|>"]):
     # Initialize with standard byte vocabulary (0-255)
     vocab = make_standard_vocab()
     
     # Add special tokens to vocab
-    special_tokens = ["<|endoftext|>"]
     for i, token in enumerate(special_tokens):
         vocab[256 + i] = token.encode('utf-8')
     
