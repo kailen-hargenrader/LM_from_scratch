@@ -164,3 +164,9 @@ cython_debug/
 
 #vscode
 .vscode/
+
+#data
+data/
+
+#artifacts
+artifacts/

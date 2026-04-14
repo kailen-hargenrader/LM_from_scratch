@@ -37,6 +37,16 @@ class BiDict(Dict[K, V], Generic[K, V]):
 
     def __contains__(self, key: object) -> bool:
         return super().__contains__(key)
+    
+    def __getstate__(self):
+        return dict(self)
+
+    def __setstate__(self, state):
+        self._inverse = {}
+        self.update(state)
+
+    def __reduce__(self):
+        return (self.__class__, (dict(self),))
 
     def get_key(self, value: V, default: Optional[K] = None) -> Optional[K]:
         """

@@ -165,7 +165,7 @@ class BPETokenizer(BaseTokenizer):
             heappush(heap, (-count, pair))
         
         # === TRAINING LOOP ===
-        num_merges = min(max_vocab_size - len(self.vocab), len(pair_counts))
+        num_merges = max_vocab_size - len(self.vocab)
         new_token_id = len(self.vocab)
         
         for merge_step in range(num_merges):
@@ -191,9 +191,10 @@ class BPETokenizer(BaseTokenizer):
             self.vocab[new_token_id] = best_pair[0] + best_pair[1]
             new_token_id += 1
             
-            # Update progress bar if provided
+            # Update progress bar if provided (update to current vocab size)
             if pbar is not None:
-                pbar.update(1)
+                pbar.n = len(self.vocab)
+                pbar.refresh()
             
             # Update Words (Local Update)
             affected_word_indices = inverted_index.get(best_pair, set()).copy()
