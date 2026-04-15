@@ -27,7 +27,10 @@ def run_linear(
     Returns:
         Float[Tensor, "... d_out"]: The transformed output of your linear module.
     """
-    raise NotImplementedError
+    from basicformer.model.modules import TruncNormalNoBiasLinear
+    linear = TruncNormalNoBiasLinear(d_in, d_out)
+    linear.load_state_dict({"weight": weights})
+    return linear(in_features)
 
 
 def run_embedding(
@@ -48,8 +51,10 @@ def run_embedding(
     Returns:
         Float[Tensor, "... d_model"]: Batch of embeddings returned by your Embedding layer.
     """
-    raise NotImplementedError
-
+    from basicformer.model.modules import Embedding
+    embedding = Embedding(d_model, vocab_size)
+    embedding.load_state_dict({"embedding_table": weights})
+    return embedding(token_ids)
 
 def run_ffn(
     d_model: int,
@@ -71,13 +76,10 @@ def run_ffn(
     Returns:
         Float[Tensor, "... d_model"]: Output embeddings of the same shape as the input embeddings.
     """
-    # Example:
-    # If your state dict keys match, you can use `load_state_dict()`
-    # ffn.load_state_dict({"fc1.weight": w1_weight, "fc2.weight": w2_weight})
-    # You can also manually assign the weights
-    # ffn.fc1.weight.data = w1_weight
-    # ffn.fc2.weight.data = w2_weight
-    raise NotImplementedError
+    from basicformer.model.modules import PositionwiseFeedForward
+    ffn = PositionwiseFeedForward(d_model, d_ff)
+    ffn.load_state_dict({"fc1.weight": w1_weight, "fc2.weight": w2_weight})
+    return ffn(in_features)
 
 
 def run_layernorm(
@@ -100,7 +102,10 @@ def run_layernorm(
     Returns:
         Float[Tensor, "... d_model"]: Tensor with the output of running LayerNorm on `in_features`.
     """
-    raise NotImplementedError
+    from basicformer.model.normalization import LayerNorm
+    layer_norm = LayerNorm(d_model, eps)
+    layer_norm.load_state_dict({"weight": weight, "bias": bias})
+    return layer_norm(in_features)
 
 
 def run_sinusoidal_pe(
@@ -109,7 +114,9 @@ def run_sinusoidal_pe(
     token_positions: Int[Tensor, " ... sequence_length"],
 ) -> Float[Tensor, " ... sequence_length d_model"]:
     """Return sinusoidal positional embeddings for the given token positions."""
-    raise NotImplementedError
+    from basicformer.model.positional import SinusoidalPositionalEncoding
+    sinusoidal_pe = SinusoidalPositionalEncoding(d_model=d_model, max_seq_len=max_seq_len)
+    return sinusoidal_pe(token_positions)
 
 
 def run_scaled_dot_product_attention(
