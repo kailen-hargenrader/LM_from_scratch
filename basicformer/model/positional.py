@@ -13,14 +13,14 @@ class SinusoidalPositionalEncoding(nn.Module):
         super().__init__()
         self.device = device
         self.dtype = dtype
-        self.register_buffer("pe", self.make_sinusoidal_embeddings(max_seq_len, d_model))
+        self.register_buffer("pe", self.make_sinusoidal_embeddings(max_seq_len, d_model), persistent=False)
 
     def make_sinusoidal_embeddings(self, max_seq_len: int, d_model: int) -> torch.Tensor:
         """
         Make sinusoidal embeddings for the positional encoding.
         """
-        position = torch.arange(max_seq_len)
-        div_term = torch.exp(torch.arange(0, d_model, 2) * -(math.log(10000.0) / d_model))
+        position = torch.arange(max_seq_len, device=self.device)
+        div_term = torch.exp(torch.arange(0, d_model, 2, device=self.device) * -(math.log(10000.0) / d_model))
         pe = torch.empty(max_seq_len, d_model, device=self.device, dtype=self.dtype)
         pe[:, ::2] = torch.sin(position.unsqueeze(1) * div_term.unsqueeze(0))
         pe[:, 1::2] = torch.cos(position.unsqueeze(1) * div_term.unsqueeze(0))

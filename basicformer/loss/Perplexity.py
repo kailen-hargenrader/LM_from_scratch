@@ -1,14 +1,13 @@
-# Custom Cross-Entropy loss from scratch
 import torch
 from torch import nn
 
-class CrossEntropy(nn.Module):
+class Perplexity(nn.Module):
     """
-    A cross-entropy loss that computes the cross-entropy loss between the input and the target.
+    A perplexity layer that computes the perplexity of the input.
     """
     def __init__(self):
         super().__init__()
-
+    
     def forward(self, logits: torch.Tensor, targets: torch.Tensor) -> torch.Tensor:
         """
         Given the input of a CrossEntropy layer, compute the output of the CrossEntropy layer.
@@ -28,4 +27,4 @@ class CrossEntropy(nn.Module):
         log_probs = logits - logits.logsumexp(dim=-1, keepdim=True)
         # Select the log probabilities of the correct class for each sample.
         loss = -log_probs.gather(dim=-1, index=targets.unsqueeze(-1)).squeeze(-1)
-        return loss.mean()
+        return torch.exp(loss.mean())

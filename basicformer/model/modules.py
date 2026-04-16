@@ -79,7 +79,7 @@ class Embedding(nn.Module):
     """
     def __init__(self, d_model: int, vocab_size: int, device: Optional[torch.device] = None, dtype: Optional[torch.dtype] = None):
         super().__init__()
-        self.embedding_table = nn.Parameter(
+        self.weight = nn.Parameter(
             trunc_normal_(
                 torch.empty(vocab_size, d_model, device=device, dtype=dtype), 
                 mean=0.0, 
@@ -100,13 +100,4 @@ class Embedding(nn.Module):
             Float[Tensor, " ... d_model"]: The embeddings for the token ids.
         """
         
-        return self.embedding_table[x.to(self.embedding_table.device)].to(x.device)
-
-if __name__ == "__main__":
-    d_in = 10
-    d_out = 20
-    x = torch.randn(1, d_in)
-    linear = TruncNormalNoBiasLinear(d_in, d_out)
-    print(f"Linear input shape: {x.shape}")
-    print(f"Linear weight shape: {linear.weight.shape}")
-    print(f"Linear output shape: {linear(x).shape}")
+        return self.weight[x.to(self.weight.device)].to(x.device)
