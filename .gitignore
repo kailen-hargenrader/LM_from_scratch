@@ -170,3 +170,10 @@ data/
 
 #artifacts
 artifacts/
+
+#wandb
+wandb/
+
+#checkpoints
+checkpoints/
+
