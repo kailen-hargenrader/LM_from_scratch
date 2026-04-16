@@ -1,0 +1,22 @@
+{
+    "vocab_size": 10000,
+    "context_length": 512,
+    "d_model": 256,
+    "num_layers": 4,
+    "num_heads": 8,
+    "d_ff": 1024,
+    "learning_rate": 5e-4,
+    "batch_size": 128,
+    "num_epochs": 200,
+    "weight_decay": 0.01,
+    "checkpoint_dir": "checkpoints/full_train",
+    "log_interval": 500,
+    "val_interval": 5000,
+    "checkpoint_interval": 5000,
+    "device": "cuda",
+    "dtype": "float32",
+    "use_wandb": true,
+    "wandb_project": "basicformer",
+    "wandb_entity": "khargenr-california-institute-of-technology-caltech",
+    "run_name": "tiny-stories-full-train"
+  }

@@ -1,0 +1,22 @@
+{
+  "vocab_size": 10000,
+  "context_length": 128,
+  "d_model": 256,
+  "num_layers": 4,
+  "num_heads": 8,
+  "d_ff": 1024,
+  "learning_rate": 5e-4,
+  "batch_size": 64,
+  "num_epochs": 10,
+  "weight_decay": 0.01,
+  "checkpoint_dir": "checkpoints/example",
+  "log_interval": 100,
+  "val_interval": 500,
+  "checkpoint_interval": 1000,
+  "device": "cuda",
+  "dtype": "float32",
+  "use_wandb": false,
+  "wandb_project": "transformer-lm",
+  "wandb_entity": null,
+  "run_name": null
+}
