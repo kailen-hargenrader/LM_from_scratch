@@ -8,10 +8,10 @@ VOCAB_SIZE = 10000
 
 # Paths
 DATA_DIR = 'data'
-TRAIN_FILE = os.path.join(DATA_DIR, 'TinyStoriesV2-GPT4-train.txt')
+INPUT_FILE = os.path.join(DATA_DIR, 'TinyStoriesV2-GPT4-valid.txt')
 ARTIFACTS_DIR = os.path.join('artifacts', 'tokenizers')
 TOKENIZER_PICKLE_PATH = os.path.join(ARTIFACTS_DIR, f'TS_bpe_tokenizer_{VOCAB_SIZE}.pkl')
-OUTPUT_PATH = os.path.join(DATA_DIR, 'TinyStoriesV2-GPT4-ids.npy')
+OUTPUT_PATH = os.path.join(DATA_DIR, 'TinyStoriesV2-GPT4-valid-ids.npy')
 
 
 def load_tokenizer(pickle_path=TOKENIZER_PICKLE_PATH):
@@ -36,8 +36,8 @@ def tokenize_file(input_file, tokenizer, chunk_size=5_000_000):
 
 
 def main():
-    if not os.path.exists(TRAIN_FILE):
-        print(f"Training file {TRAIN_FILE} does not exist.")
+    if not os.path.exists(INPUT_FILE):
+        print(f"Input file {INPUT_FILE} does not exist.")
         return
     
     if not os.path.exists(TOKENIZER_PICKLE_PATH):
@@ -48,11 +48,11 @@ def main():
     tokenizer = load_tokenizer()
     print(f"✓ Tokenizer loaded with vocab size: {len(tokenizer.vocab)}")
     
-    print(f"\nTokenizing {TRAIN_FILE}...")
+    print(f"\nTokenizing {INPUT_FILE}...")
     
     # Tokenize file and collect all token ID batches
     all_token_batches = []
-    for token_batch in tqdm(tokenize_file(TRAIN_FILE, tokenizer), desc="Tokenizing chunks"):
+    for token_batch in tqdm(tokenize_file(INPUT_FILE, tokenizer), desc="Tokenizing chunks"):
         all_token_batches.append(token_batch)
     
     # Concatenate all batches into a single array
@@ -68,7 +68,7 @@ def main():
     print(f"\n{'='*60}")
     print(f"Summary:")
     print(f"{'='*60}")
-    print(f"Input file:              {TRAIN_FILE}")
+    print(f"Input file:              {INPUT_FILE}")
     print(f"Tokenizer:               {TOKENIZER_PICKLE_PATH}")
     print(f"Output file:             {OUTPUT_PATH}")
     print(f"Total tokens:            {len(token_array):,}")

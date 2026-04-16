@@ -2,8 +2,8 @@ import os
 import numpy as np
 
 DATA_DIR = 'data'
-TRAIN_FILE = os.path.join(DATA_DIR, 'TinyStoriesV2-GPT4-train.txt')
-OUTPUT_PATH = os.path.join(DATA_DIR, 'TinyStoriesV2-GPT4-ids.npy')
+INPUT_FILE = os.path.join(DATA_DIR, 'TinyStoriesV2-GPT4-valid.txt')
+OUTPUT_PATH = os.path.join(DATA_DIR, 'TinyStoriesV2-GPT4-valid-ids.npy')
 
 
 def main():
@@ -21,11 +21,11 @@ def main():
     print(f"\nNumber of tokens: {num_tokens:,}")
     
     # Get original file size
-    if not os.path.exists(TRAIN_FILE):
-        print(f"Training file {TRAIN_FILE} does not exist.")
+    if not os.path.exists(INPUT_FILE):
+        print(f"Input file {INPUT_FILE} does not exist.")
         return
     
-    file_size_bytes = os.path.getsize(TRAIN_FILE)
+    file_size_bytes = os.path.getsize(INPUT_FILE)
     print(f"Original file size: {file_size_bytes:,} bytes")
     
     # Calculate compression ratio
