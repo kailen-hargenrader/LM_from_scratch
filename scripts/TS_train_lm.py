@@ -41,6 +41,7 @@ class TrainingConfig:
         self.num_heads = kwargs.get('num_heads', 8)
         self.d_ff = kwargs.get('d_ff', 1024)
         self.norm = kwargs.get('norm', True)
+        self.RoPE = kwargs.get('RoPE', True)
         
         # Optimization
         self.learning_rate = kwargs.get('learning_rate', 5e-4)
@@ -261,7 +262,7 @@ class Trainer:
             str(self.device),
         )
         
-        logits = self.model(x, norm=self.config.norm)
+        logits = self.model(x, norm=self.config.norm, RoPE=self.config.RoPE)
         
         loss = self.loss_fn(logits, y)
         
@@ -294,7 +295,7 @@ class Trainer:
                 str(self.device),
             )
             
-            logits = self.model(x, norm=self.config.norm)
+            logits = self.model(x, norm=self.config.norm, RoPE=self.config.RoPE)
             loss = self.loss_fn(logits, y)
             val_loss += loss.item()
         
@@ -377,6 +378,10 @@ def main():
                         help='Number of attention heads')
     parser.add_argument('--d-ff', type=int, default=1024,
                         help='Feedforward hidden dimension')
+    parser.add_argument('--norm', type=bool, default=True,
+                        help='Use LayerNorm')
+    parser.add_argument('--RoPE', type=bool, default=True,
+                        help='Use RoPE')
     
     # Optimization
     parser.add_argument('--lr', type=float, default=5e-4,
@@ -434,6 +439,8 @@ def main():
             num_layers=args.num_layers,
             num_heads=args.num_heads,
             d_ff=args.d_ff,
+            norm=args.norm,
+            RoPE=args.RoPE,
             learning_rate=args.lr,
             batch_size=args.batch_size,
             num_epochs=args.num_epochs,

@@ -104,7 +104,7 @@ class TransformerLM(nn.Module):
         # LM head
         self.lm_head = TruncNormalNoBiasLinear(d_model, vocab_size)
     
-    def forward(self, in_indices: torch.Tensor, norm: bool = True) -> torch.Tensor:
+    def forward(self, in_indices: torch.Tensor, norm: bool = True, RoPE: bool = True) -> torch.Tensor:
         """
         Apply the Transformer language model to input token indices.
         
@@ -122,7 +122,7 @@ class TransformerLM(nn.Module):
         # Add positional embeddings
         positions = torch.arange(seq_len, device=in_indices.device)
         pos_embs = self.pos_embeddings(positions)  # (seq_len, d_model)
-        x = x + pos_embs.unsqueeze(0)  # Broadcast to (batch, seq_len, d_model)
+        x = x + pos_embs.unsqueeze(0) if RoPE else x  # Broadcast to (batch, seq_len, d_model)
         
         # Apply Transformer blocks
         for layer in self.layers:
